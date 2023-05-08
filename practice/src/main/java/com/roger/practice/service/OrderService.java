@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface OrderService {
 
-Integer createOrder(Integer userId, CreateOrderRequest createOrderRequest);
+Integer createOrder(CreateOrderRequest createOrderRequest);
 
-Ordering getOrderByOrderId(Integer userId,Integer orderId);
+Ordering getOrderByOrderId(CreateOrderRequest createOrderRequest,Integer orderId);
 
 
 List<OrderItem> getOrderItemByOrderId(Integer orderId);

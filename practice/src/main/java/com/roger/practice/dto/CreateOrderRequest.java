@@ -7,6 +7,15 @@ public class CreateOrderRequest {
 
     @NotEmpty
     private List<BuyItem> buyItemList;
+    private Integer userId;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     private String form;
 

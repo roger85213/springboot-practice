@@ -24,7 +24,7 @@ public class OrderDaoImpl implements OrderDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public Integer createOrder(Integer userId, Integer totalAmount, CreateOrderRequest createOrderRequest) {
+    public Integer createOrder(Integer totalAmount, CreateOrderRequest createOrderRequest) {
         String sql = "INSERT INTO ordering(form,number,total_amount,created_date,last_modified_date) " +
                 "VALUES (:form, :number, :totalAmount, :createdDate, :lastModifiedDate)";
 

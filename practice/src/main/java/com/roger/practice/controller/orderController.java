@@ -21,13 +21,13 @@ public class orderController {
     private OrderService orderService;
 
     //創建訂單
-@PostMapping("/order/{userId}")
-    public ResponseEntity<?> createOrder(@RequestBody CreateOrderRequest createOrderRequest,
-                                         @PathVariable @Valid Integer userId){
+@PostMapping("/order")
+    public ResponseEntity<?> createOrder(@RequestBody CreateOrderRequest createOrderRequest){
 
-    Integer orderId = orderService.createOrder(userId,createOrderRequest);
-    Ordering ordering = orderService.getOrderByOrderId(userId,orderId);
+    Integer orderId = orderService.createOrder(createOrderRequest);
+    Ordering ordering = orderService.getOrderByOrderId(createOrderRequest,orderId);
     return ResponseEntity.status(HttpStatus.CREATED).body(ordering);
+
 
 }
 

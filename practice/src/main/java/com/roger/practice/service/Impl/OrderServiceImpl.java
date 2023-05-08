@@ -27,46 +27,85 @@ public class OrderServiceImpl implements OrderService {
     private UserDao userDao;
 
     @Override
-    public Integer createOrder(Integer userId, CreateOrderRequest createOrderRequest) {
+    public Integer createOrder(CreateOrderRequest createOrderRequest) {
 
-        List<OrderItem> orderItemList = new ArrayList<>();
+        if (createOrderRequest.getUserId() != null) {
 
-        int totalAmount = 0 ;
+            List<OrderItem> orderItemList = new ArrayList<>();
 
-        for (BuyItem buyItem : createOrderRequest.getBuyItemList()){
+            int totalAmount = 0;
 
-            Product product = productDao.getProductByProductId(buyItem.getProductId());
+            for (BuyItem buyItem : createOrderRequest.getBuyItemList()) {
 
-            int amount = buyItem.getQuantity() * product.getPrice();
-            totalAmount =totalAmount + amount;
+                Product product = productDao.getProductByProductId(buyItem.getProductId());
 
-            OrderItem orderItem = new OrderItem();
-            orderItem.setProductId(buyItem.getProductId());
-            orderItem.setQuantity(buyItem.getQuantity());
-            orderItem.setAmount(amount);
+                int amount = buyItem.getQuantity() * product.getPrice();
+                totalAmount = totalAmount + amount;
 
-            orderItemList.add(orderItem);
+                OrderItem orderItem = new OrderItem();
+                orderItem.setProductId(buyItem.getProductId());
+                orderItem.setQuantity(buyItem.getQuantity());
+                orderItem.setAmount(amount);
+
+                orderItemList.add(orderItem);
+            }
+            Integer orderId = orderDao.createOrder(totalAmount, createOrderRequest);
+
+            User user = userDao.getUserByUserId(createOrderRequest);
+
+            int point = user.getPoint() + totalAmount / 5;
+            userDao.update(createOrderRequest, point);
+
+            orderDao.createOrderItems(orderId, orderItemList);
+
+            return orderId;
+        }else {
+            List<OrderItem> orderItemList = new ArrayList<>();
+
+            int totalAmount = 0;
+
+            for (BuyItem buyItem : createOrderRequest.getBuyItemList()) {
+
+                Product product = productDao.getProductByProductId(buyItem.getProductId());
+
+                int amount = buyItem.getQuantity() * product.getPrice();
+                totalAmount = totalAmount + amount;
+
+                OrderItem orderItem = new OrderItem();
+                orderItem.setProductId(buyItem.getProductId());
+                orderItem.setQuantity(buyItem.getQuantity());
+                orderItem.setAmount(amount);
+
+                orderItemList.add(orderItem);
+            }
+            Integer orderId = orderDao.createOrder(totalAmount, createOrderRequest);
+            orderDao.createOrderItems(orderId, orderItemList);
+
+
+            return orderId;
         }
-        Integer orderId = orderDao.createOrder(userId,totalAmount,createOrderRequest);
-        int point = totalAmount/5;
-        userDao.update(userId,point);
-
-        orderDao.createOrderItems(orderId,orderItemList);
-
-        return orderId;
 
     }
 
     @Override
-    public Ordering getOrderByOrderId(Integer userId,Integer orderId) {
+    public Ordering getOrderByOrderId(CreateOrderRequest createOrderRequest,Integer orderId) {
+
+        if (createOrderRequest.getUserId() != null){
         Ordering ordering = orderDao.getOrderByOrderId(orderId);
         List<OrderItem> orderItemList = orderDao.getOrderItemByOrderId(orderId);
-        User user = userDao.getUserByUserId(userId);
+        User user = userDao.getUserByUserId(createOrderRequest);
 
         ordering.setOrderItemList(orderItemList);
         ordering.setUser(user);
 
         return ordering;
+        }else {
+            Ordering ordering = orderDao.getOrderByOrderId(orderId);
+            List<OrderItem> orderItemList = orderDao.getOrderItemByOrderId(orderId);
+            ordering.setOrderItemList(orderItemList);
+            return ordering;
+
+        }
     }
 
     @Override
