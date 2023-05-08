@@ -102,6 +102,21 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public List<Ordering> getOrderByUserId(Integer userId) {
+        String sql = "SELECT order_id,form,number,total_amount,created_date,last_modified_date,point,user_id " +
+                "FROM ordering WHERE user_id = :userId";
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        List<Ordering> orderingList = namedParameterJdbcTemplate.query(sql,map, new OrderingRowMapper());
+
+        if (orderingList.size() > 0){
+        return orderingList;
+        }else {
+            return null;
+        }
+    }
+
+    @Override
     public List<OrderItem> getOrderItemByOrderId(Integer orderId) {
         String sql = "SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, " +
                 "p.product_name " +

@@ -110,6 +110,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Ordering> getOrderByUserId(Integer userId) {
+        List<Ordering> orderingList =orderDao.getOrderByUserId(userId);
+        if (orderingList != null){
+
+        for(Ordering ordering : orderingList){
+
+            List<OrderItem> orderItemList = orderDao.getOrderItemByOrderId(ordering.getOrderId());
+            ordering.setOrderItemList(orderItemList);
+
+        }
+        return orderingList;
+        }else {
+            return null;
+        }
+    }
+
+    @Override
     public List<OrderItem> getOrderItemByOrderId(Integer orderId) {
 
 
@@ -121,4 +138,6 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.getOrderByFormNumber(form,number);
 
     }
+
+
 }

@@ -18,6 +18,7 @@ Ordering getOrderByOrderId(Integer orderId);
 List<OrderItem> getOrderItemByOrderId(Integer orderId);
 
 Ordering getOrderByFormNumber(String form, Integer number);
+List<Ordering> getOrderByUserId(Integer userId);
 
 
 }
