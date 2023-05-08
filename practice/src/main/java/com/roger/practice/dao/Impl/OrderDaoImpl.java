@@ -94,6 +94,21 @@ public class OrderDaoImpl implements OrderDao {
         List<OrderItem> orderItemList = namedParameterJdbcTemplate.query(sql,map, new OrderItemRowMapper());
         return orderItemList;
 
+    }
 
+    @Override
+    public Ordering getOrderByFormNumber(String form, Integer number) {
+        String sql = "SELECT order_id, form, number, total_amount, created_date, last_modified_date " +
+                "FROM ordering WHERE form = :form AND number = :number ORDER BY created_date DESC LIMIT 1";
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("form", form);
+        map.put("number", number);
+        List<Ordering> orderingList = namedParameterJdbcTemplate.query(sql,map,new OrderingRowMapper());
+        if (orderingList.size()>0){
+        return orderingList.get(0);
+        }else {
+            return null;
+        }
     }
 }

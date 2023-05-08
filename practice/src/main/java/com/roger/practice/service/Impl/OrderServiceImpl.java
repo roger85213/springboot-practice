@@ -68,4 +68,17 @@ public class OrderServiceImpl implements OrderService {
 
         return ordering;
     }
+
+    @Override
+    public List<OrderItem> getOrderItemByOrderId(Integer orderId) {
+
+
+        return orderDao.getOrderItemByOrderId(orderId);
+    }
+
+    @Override
+    public Ordering getOrderByFormNumber(String form, Integer number) {
+        return orderDao.getOrderByFormNumber(form,number);
+
+    }
 }

@@ -15,5 +15,7 @@ void createOrderItems(Integer orderId, List<OrderItem> orderItemList);
 Ordering getOrderByOrderId(Integer orderId);
 List<OrderItem> getOrderItemByOrderId(Integer orderId);
 
+Ordering getOrderByFormNumber(String form, Integer number);
+
 
 }
