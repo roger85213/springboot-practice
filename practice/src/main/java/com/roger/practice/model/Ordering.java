@@ -7,11 +7,31 @@ public class Ordering {
     private Integer orderId;
     private String form;
     private Integer number;
+    private Integer userId;
+
+
+
     private Integer totalAmount;
+    private Integer point;
     private Date createdDate;
     private Date lastModifiedDate;
     private List<OrderItem> orderItemList;
     private  User user;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
+    }
 
     public List<OrderItem> getOrderItemList() {
         return orderItemList;

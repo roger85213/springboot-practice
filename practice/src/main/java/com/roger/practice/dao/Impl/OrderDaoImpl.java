@@ -24,8 +24,29 @@ public class OrderDaoImpl implements OrderDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public Integer createOrder(Integer totalAmount, CreateOrderRequest createOrderRequest) {
-        String sql = "INSERT INTO ordering(form,number,total_amount,created_date,last_modified_date) " +
+    public Integer createOrder(Integer pointForOne, Integer totalAmount, CreateOrderRequest createOrderRequest) {
+        String sql = "INSERT INTO ordering(form,number,total_amount,created_date,last_modified_date,point,user_id ) " +
+                "VALUES (:form, :number, :totalAmount, :createdDate, :lastModifiedDate, :point, :userId)";
+
+        Map<String,Object> map = new HashMap();
+        map.put("form", createOrderRequest.getForm());
+        map.put("number", createOrderRequest.getNumber());
+        map.put("userId", createOrderRequest.getUserId());
+        map.put("totalAmount",totalAmount);
+        map.put("point", pointForOne);
+        Date now = new Date();
+
+        map.put("createdDate",now);
+        map.put("lastModifiedDate",now);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(sql,new MapSqlParameterSource(map),keyHolder);
+        int orderId = keyHolder.getKey().intValue();
+        return orderId;
+    }
+
+    @Override
+    public Integer createOrderWithoutUser(Integer totalAmount, CreateOrderRequest createOrderRequest) {
+        String sql = "INSERT INTO ordering(form,number,total_amount,created_date,last_modified_date ) " +
                 "VALUES (:form, :number, :totalAmount, :createdDate, :lastModifiedDate)";
 
         Map<String,Object> map = new HashMap();
@@ -66,7 +87,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Ordering getOrderByOrderId(Integer orderId) {
-        String sql = "SELECT order_id,form,number,total_amount,created_date,last_modified_date " +
+        String sql = "SELECT order_id,form,number,total_amount,created_date,last_modified_date,point,user_id " +
                 "FROM ordering WHERE order_id = :orderId";
         Map<String,Object> map = new HashMap();
         map.put("orderId", orderId);
@@ -98,7 +119,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Ordering getOrderByFormNumber(String form, Integer number) {
-        String sql = "SELECT order_id, form, number, total_amount, created_date, last_modified_date " +
+        String sql = "SELECT order_id, form, number, total_amount, created_date, last_modified_date,point,user_id " +
                 "FROM ordering WHERE form = :form AND number = :number ORDER BY created_date DESC LIMIT 1";
 
         Map<String,Object> map = new HashMap<>();

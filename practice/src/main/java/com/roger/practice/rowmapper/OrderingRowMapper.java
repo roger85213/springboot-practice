@@ -18,6 +18,8 @@ public class OrderingRowMapper implements RowMapper<Ordering> {
         ordering.setTotalAmount(resultSet.getInt("total_amount"));
         ordering.setCreatedDate(resultSet.getTimestamp("created_date"));
         ordering.setLastModifiedDate(resultSet.getTimestamp("last_modified_date"));
+        ordering.setPoint(resultSet.getInt("point"));
+        ordering.setUserId(resultSet.getInt("user_id"));
 
         return ordering;
 

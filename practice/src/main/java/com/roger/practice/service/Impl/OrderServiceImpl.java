@@ -49,12 +49,13 @@ public class OrderServiceImpl implements OrderService {
 
                 orderItemList.add(orderItem);
             }
-            Integer orderId = orderDao.createOrder(totalAmount, createOrderRequest);
 
             User user = userDao.getUserByUserId(createOrderRequest);
-
+            int pointForOne = totalAmount / 5 ;
             int point = user.getPoint() + totalAmount / 5;
             userDao.update(createOrderRequest, point);
+
+            Integer orderId = orderDao.createOrder(pointForOne,totalAmount, createOrderRequest);
 
             orderDao.createOrderItems(orderId, orderItemList);
 
@@ -78,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
 
                 orderItemList.add(orderItem);
             }
-            Integer orderId = orderDao.createOrder(totalAmount, createOrderRequest);
+            Integer orderId = orderDao.createOrderWithoutUser(totalAmount, createOrderRequest);
             orderDao.createOrderItems(orderId, orderItemList);
 
 
