@@ -1,4 +1,4 @@
-package com.roger.practice.dao;
+package com.roger.practice.service;
 
 import com.roger.practice.dto.CreateProductRequest;
 import com.roger.practice.dto.ProductQueryParams;
@@ -6,11 +6,12 @@ import com.roger.practice.model.Product;
 
 import java.util.List;
 
-public interface ProductDao {
+public interface ProductService {
 
-    Product getProductByProductId(Integer productId);
 
     Integer createProduct(CreateProductRequest createProductRequest);
+
+    Product getProductByProductId(Integer productId);
 
     List<Product> getProducts(ProductQueryParams productQueryParams);
 

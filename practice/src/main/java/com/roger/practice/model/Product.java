@@ -10,6 +10,16 @@ public class Product {
     private Date createdDate;
     private Date lastModifiedDate;
 
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public Integer getProductId() {
         return productId;
     }
