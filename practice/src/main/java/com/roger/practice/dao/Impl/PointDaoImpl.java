@@ -2,6 +2,7 @@ package com.roger.practice.dao.Impl;
 
 import com.roger.practice.dao.PointDao;
 import com.roger.practice.dto.CreatePointProduct;
+import com.roger.practice.dto.PointQueryParams;
 import com.roger.practice.model.Point;
 import com.roger.practice.rowmapper.PointRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,39 @@ public class PointDaoImpl implements PointDao {
     }else {
         return null;
     }
+    }
+
+    @Override
+    public List<Point> getPointProducts(PointQueryParams pointQueryParams) {
+        String sql = "SELECT product_id, product_name, category, point, created_date FROM point WHERE 1=1";
+        Map<String,Object> map = new HashMap<>();
+        if(pointQueryParams.getCategory() != null){
+            sql = sql + " AND category= :category";
+            map.put("category", pointQueryParams.getCategory());
+        }
+
+        sql = sql + " ORDER BY " + pointQueryParams.getOrderBy() + " " + pointQueryParams.getSort();
+
+        sql = sql + " LIMIT :limit OFFSET :offset";
+        map.put("limit", pointQueryParams.getLimit());
+        map.put("offset", pointQueryParams.getOffset());
+
+        List<Point> pointList = namedParameterJdbcTemplate.query(sql,map, new PointRowMapper());
+
+        return pointList;
+    }
+
+    @Override
+    public Integer countPointProducts(PointQueryParams pointQueryParams) {
+    String sql =  "SELECT count(*) FROM point WHERE 1=1";
+    Map<String, Object> map = new HashMap<>();
+    if (pointQueryParams.getCategory() != null){
+        sql= sql + " AND category = :category";
+        map.put("category", pointQueryParams.getCategory());
+    }
+
+    Integer total = namedParameterJdbcTemplate.queryForObject(sql,map, Integer.class);
+    return total;
 
     }
 }
